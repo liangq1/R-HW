@@ -1,0 +1,42 @@
+---
+title: "R programming HW"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+## For this assignment, assume that the matrix supplied is always invertible.
+## This function creates a special "matrix" object that can cache its inverse.
+
+makeCacheMatrix <- function(x = matrix()) {
+        invt <- NULL
+        set <- function(y) {
+                x <<- y
+                invt <<- NULL
+        }
+        get <- function() x
+        setInverse <- function(inverse) invt <<- inverse
+        getInverse <- function() invt
+        list(set = set,
+             get = get,
+             setInverse = setInverse,
+             getInverse = getInverse)
+}
+```
+
+```{r}
+## Computing the inverse of a square matrix can be done with the solve ##function in R. For example, if X is a square invertible matrix, then ##solve(X) returns its inverse.
+
+cacheSolve <- function(x, ...) {
+        ## Return a matrix that is the inverse of 'x'
+        invt <- x$getInverse()
+        if (!is.null(invt)) {
+                message("getting cached data")
+                return(invt)
+        }
+        mat <- x$get()
+        invt <- solve(mat, ...)
+        x$setInverse(invt)
+        invt
+}
+```
+
